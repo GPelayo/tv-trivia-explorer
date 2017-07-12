@@ -1,17 +1,18 @@
 from flask import Flask, render_template, request, jsonify
-from tv_trivia import imdb
 
-app = Flask(__name__)
+import imdb
+
+APP = Flask(__name__)
 
 DEFAULT_SEASON = 1
 
 
-@app.route('/')
+@APP.route('/')
 def search_page():
     return render_template('trivia.html')
 
 
-@app.route('/show')
+@APP.route('/show')
 def show():
     print('Finding Data')
     opt_args = []
