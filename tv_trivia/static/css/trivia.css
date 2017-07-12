@@ -1,0 +1,23 @@
+body {
+    font-family: 'courier';
+}
+
+.small_input {
+    width: 5em;
+}
+
+.form_containter {
+    width: 100%;
+}
+
+.start_at_container {
+    display: inline-block;
+    width: 100%;
+    height: 75px;
+}
+
+.form_input {
+    font-family: Verdana, Genova, Tahoma, sans-serif;
+    display: inline-block;
+    margin: 5px;
+}
