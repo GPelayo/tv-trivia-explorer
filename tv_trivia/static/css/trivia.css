@@ -16,6 +16,11 @@ body {
     height: 75px;
 }
 
+.status {
+    color: #DDDDDD;
+    font-weight: bold;
+}
+
 .form_input {
     font-family: Verdana, Genova, Tahoma, sans-serif;
     display: inline-block;

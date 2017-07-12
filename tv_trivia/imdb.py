@@ -2,15 +2,13 @@ from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from urllib import parse
 from tv_trivia.models import Episode, Trivia, Season
-import os
 from tv_trivia import omdb
+
 MAX_SEASONS = 100
 
 
 TRIVIA_SUFFIX = "trivia"
-FULL_DRIVER_PATH = '/usr/local/bin'
-os.environ['PATH'] = FULL_DRIVER_PATH
-driver_type = webdriver.Chrome
+driver_type = webdriver.PhantomJS
 
 
 def extract_imdb_id_from_url(link):

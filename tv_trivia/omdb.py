@@ -1,11 +1,11 @@
 from urllib import request, parse
 import json
-import secrets
+import settings
 from tv_trivia.models import Show
 
 
 def get_show_by_id(title_query, year=''):
-    qry_dict = {'t': title_query, 'apikey': secrets.OMDB_API_KEY}
+    qry_dict = {'t': title_query, 'apikey': settings.OMDB_API_KEY}
     if year:
         qry_dict.update({'y': year})
 
