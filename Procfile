@@ -1,1 +1,1 @@
-web: python flask_app.py
+web: python tv_trivia/run.py

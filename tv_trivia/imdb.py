@@ -1,8 +1,8 @@
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from urllib import parse
-from tv_trivia.models import Episode, Trivia, Season
-from tv_trivia import omdb
+from models import Episode, Trivia, Season
+import omdb
 
 MAX_SEASONS = 100
 

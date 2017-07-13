@@ -1,7 +1,8 @@
 from urllib import request, parse
 import json
+from urllib import request, parse
 import settings
-from tv_trivia.models import Show
+from models import Show
 
 
 def get_show_by_id(title_query, year=''):

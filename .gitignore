@@ -74,7 +74,6 @@ geckodriver.log
 *-env
 
 # Javascript
-.bowerrc
 .bowerrc.json
 node_modules/
 tv_trivia/static/bower_components
