@@ -14,12 +14,11 @@ def search_page():
 
 @APP.route('/show')
 def show():
-    print('Finding Data')
     opt_args = {}
     if 'year' in request.args.keys():
         opt_args['year'] = int(request.args['year'])
     if 'season' in request.args.keys():
-        opt_args['season'] = int(request.args['season'])
-    show_data = imdb.get_show_data_by_title(request.args['title'], **opt_args)
-    print('Sent JSON')
-    return jsonify(show_data)
+        opt_args['season_start'] = int(request.args['season'])
+        opt_args['season_end'] = int(request.args['season'])
+    show_data = imdb.OMDBAPIShowFactory(request.args['title'], **opt_args).create()
+    return jsonify(show_data.serialize())

@@ -4,6 +4,7 @@ class Show:
     title = None
     year_start = None
     year_end = None
+    season_qty= None
 
     def __init__(self, imdb_id, title):
         self.title = title
@@ -28,10 +29,11 @@ class Show:
 class Season:
     number = -1
     episodes = None
+    show_id = None
 
-    def __init__(self, num, link):
+    def __init__(self, num, show_id):
         self.number = num
-        self.imdb_link = link
+        self.show_id = show_id
         self.episodes = []
 
     def serialize(self):
