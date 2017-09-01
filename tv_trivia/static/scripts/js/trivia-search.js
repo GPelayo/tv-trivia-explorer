@@ -42,7 +42,6 @@ var TVTriviaSearch = React.createClass({displayName: "TVTriviaSearch",
             searchClass.setState({ showData:data });
         }
     });
-    $['']
     event.preventDefault();
   },
   handleTitleChange: function(event){
@@ -103,4 +102,5 @@ ReactDOM.render(
   React.createElement(TVTriviaSearch, null),
   document.getElementById('content')
 );
+
 },{}]},{},[1]);

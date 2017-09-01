@@ -27,9 +27,7 @@ class SelSecDcrtr:
         def wrapper(self, *args, **kwargs):
             is_parent = kwargs.get('browser', None) is not None
             kwargs['browser'] = kwargs.get('browser', self.default_browser)
-            print(is_parent)
             output = function(self, *args, **kwargs)
-            print(is_parent)
             if not is_parent:
                 kwargs['browser'].close()
             return output
@@ -46,6 +44,7 @@ class IMDBSeleniumScraper:
     @SelSecDcrtr.safely_scrape
     def get_episode_data(self, show_id, season, browser=None):
         episode_list = []
+        print('^^', 'http://www.imdb.com/title/{}/episodes?season={}'.format(show_id, season))
         browser.get('http://www.imdb.com/title/{}/episodes?season={}'.format(show_id, season))
         trivia_browser = self.driver_type()
         for e in browser.find_elements_by_xpath("//div[contains(@class, 'list_item')]"
@@ -120,6 +119,7 @@ class EpisodeFactory(TVFactory):
 
 class OMDBAPIShowFactory(ShowFactory, IMDBSeleniumScraper):
     def __init__(self, title=None, imdb_show_id=None, year=None, season_start=None, season_end=None, browser=None):
+        print(season_end)
         ShowFactory.__init__(self, title=title, show_id=imdb_show_id, season_start=season_start, season_end=season_end,
                              year=year)
         IMDBSeleniumScraper.__init__(self, browser=browser)
@@ -128,8 +128,9 @@ class OMDBAPIShowFactory(ShowFactory, IMDBSeleniumScraper):
         sh = omdb.get_show_by_id(self.title, year=self.year)
         season_min = self.season_start or 1
         season_max = self.season_end or sh.season_qty
+        print(season_max, season_min, self.season_end)
         sh.seasons = [IMDBSeasonFactory(imdb_show_id=sh.imdb_id, season=i, browser=self.default_browser).create()
-                      for i in range(season_min, season_max+1)]
+                      for i in range(int(season_min), int(season_max)+1)]
         return sh
 
 

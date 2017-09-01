@@ -20,5 +20,8 @@ def show():
     if 'season' in request.args.keys():
         opt_args['season_start'] = int(request.args['season'])
         opt_args['season_end'] = int(request.args['season'])
+    else:
+        opt_args['season_start'] = opt_args['season_end'] = 1
+    print([i for i in request.args.keys()])
     show_data = imdb.OMDBAPIShowFactory(request.args['title'], **opt_args).create()
     return jsonify(show_data.serialize())

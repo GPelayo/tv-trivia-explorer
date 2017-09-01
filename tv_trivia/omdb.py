@@ -1,8 +1,8 @@
-from urllib import request, parse
 import json
 from urllib import request, parse
-import settings
-from models import Show
+import codecs
+from tv_trivia import settings
+from tv_trivia.models import Show
 
 
 def get_show_by_id(title_query, year=''):
@@ -11,7 +11,8 @@ def get_show_by_id(title_query, year=''):
         qry_dict.update({'y': year})
 
     r = request.urlopen("http://www.omdbapi.com/?{}".format(parse.urlencode(qry_dict)))
-    omdb_json = json.load(r)
+    rdr = codecs.getdecoder('utf-8')
+    omdb_json = json.loads(r.read().decode('utf-8'))
     imdb_id = omdb_json.get('imdbID')
     title = omdb_json.get('Title')
     s = Show(imdb_id, title)
