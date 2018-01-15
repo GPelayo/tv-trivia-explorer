@@ -1,8 +1,10 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+const DEFAULT_SEASON_VAL = "1"
+
 class EpisodeComponent extends React.Component {
     render() {
-        return React.createElement("div", null, React.createElement("h3", null, " ",  this.props.episode['title'] ), 
-            React.createElement("ul", null, 
+        return React.createElement("div", null, React.createElement("h3", {id: this.props.episode['show_id']}, " ", this.props.episode['title'] ), 
+            React.createElement("ul", {class: "trivia_list"}, 
                  this.props.episode['trivia'].map( function(t) { return React.createElement("li", null,  t['fact'] ) }) 
             )
             )
@@ -17,11 +19,12 @@ class SeasonComponent extends React.Component {
                 )
     }
 }
+
 var TVTriviaSearch = React.createClass({displayName: "TVTriviaSearch",
   getInitialState: function(){
     return {
     titleInput: '',
-    seasonInput: '',
+    seasonInput: DEFAULT_SEASON_VAL,
     showData: ''};
   },
   handleSubmit: function(event){
@@ -77,7 +80,7 @@ var TVTriviaSearch = React.createClass({displayName: "TVTriviaSearch",
                         ), 
                         React.createElement("div", {className: "form_input"}, 
                             React.createElement("label", {for: "season"}, "Season: "), React.createElement("br", null), 
-                            React.createElement("input", {idName: "season", className: "small_input", type: "text", label: "Season", placeholder: "1", value: this.state.seasonInput, onChange: this.handleSeasonChange})
+                            React.createElement("input", {idName: "season", className: "small_input", type: "text", label: "Season", placeholder: DEFAULT_SEASON_VAL, value: this.state.seasonInput, onChange: this.handleSeasonChange})
                         ), 
                         React.createElement("div", {className: "form_input"}, 
                             React.createElement("div", {className: "status"})

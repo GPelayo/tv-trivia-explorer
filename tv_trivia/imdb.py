@@ -1,5 +1,5 @@
 from selenium import webdriver
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, WebDriverException
 from urllib import parse
 from models import Episode, Trivia, Season
 import omdb
@@ -36,26 +36,42 @@ class SelSecDcrtr:
 
 class IMDBSeleniumScraper:
     driver_type = settings.SELENIUM_WEBDRIVER_TYPE
-    default_browser = None
 
-    def __init__(self, browser=None):
+    def __init__(self, browser=None, will_get_trivia=True):
         self.default_browser = browser or self.driver_type()
+        self.will_get_trivia = will_get_trivia
 
     @SelSecDcrtr.safely_scrape
     def get_episode_data(self, show_id, season, browser=None):
+        # print("Getting {} data".format(show_id))
         episode_list = []
+<<<<<<< Updated upstream
         print('^^', 'http://www.imdb.com/title/{}/episodes?season={}'.format(show_id, season))
         browser.get('http://www.imdb.com/title/{}/episodes?season={}'.format(show_id, season))
         trivia_browser = self.driver_type()
+=======
+        # print("Getting Ep Data", browser)
+        ep_link = 'http://www.imdb.com/title/{}/episodes?season={}'.format(show_id, season)
+        # print(ep_link)
+        browser.get(ep_link)
+        if self.will_get_trivia:
+            trivia_browser = self.driver_type()
+>>>>>>> Stashed changes
         for e in browser.find_elements_by_xpath("//div[contains(@class, 'list_item')]"
-                                               "/div[@class='info']"
-                                               "/strong"
-                                               "/a"):
-            link = e.get_attribute('href')
-            e = Episode(e.text, season, link)
-            e.trivia = self.get_trivia_data(e, browser=trivia_browser)
+                                                "/div[@class='info']"):
+            link_element = e.find_element_by_xpath("strong/a")
+            print(link_element.get_attribute('innerHTML'))
+            link = link_element.get_attribute('href')
+            ep_id = e.find_element_by_xpath("//div[@class='wtw-option-standalone']").get_attribute('data-tconst')
+            print(ep_id)
+            ep_name = link_element.text
+            ep = Episode(ep_id, ep_name, season)
+            ep.link = link
+            if self.will_get_trivia:
+                ep.trivia = self.get_trivia_data(e, browser=trivia_browser)
             episode_list.append(e)
-        trivia_browser.close()
+        if self.will_get_trivia:
+            trivia_browser.close()
         return episode_list
 
     @SelSecDcrtr.safely_scrape
@@ -118,29 +134,72 @@ class EpisodeFactory(TVFactory):
 
 
 class OMDBAPIShowFactory(ShowFactory, IMDBSeleniumScraper):
+<<<<<<< Updated upstream
     def __init__(self, title=None, imdb_show_id=None, year=None, season_start=None, season_end=None, browser=None):
         print(season_end)
+=======
+    def __init__(self, title=None, imdb_show_id=None, year=None, season_start=None, season_end=None, browser=None,
+                 has_trivia=True):
+>>>>>>> Stashed changes
         ShowFactory.__init__(self, title=title, show_id=imdb_show_id, season_start=season_start, season_end=season_end,
                              year=year)
-        IMDBSeleniumScraper.__init__(self, browser=browser)
+        IMDBSeleniumScraper.__init__(self, browser=browser, will_get_trivia=has_trivia)
 
     def create(self):
         sh = omdb.get_show_by_id(self.title, year=self.year)
         season_min = self.season_start or 1
         season_max = self.season_end or sh.season_qty
+<<<<<<< Updated upstream
         print(season_max, season_min, self.season_end)
         sh.seasons = [IMDBSeasonFactory(imdb_show_id=sh.imdb_id, season=i, browser=self.default_browser).create()
                       for i in range(int(season_min), int(season_max)+1)]
+=======
+        print(self.season_end, season_max)
+        try:
+            sh.seasons = [IMDBCompactSeasonFactory(imdb_show_id=sh.imdb_id, season=i, browser=self.default_browser).create()
+                          for i in range(season_min, season_max+1)]
+        finally:
+            try:
+                print("Closed Show Browser")
+                self.default_browser.close()
+            except WebDriverException:
+                pass
+            else:
+                print("No need safely close browser. Browser already closed.")
+>>>>>>> Stashed changes
         return sh
 
 
 class IMDBSeasonFactory(SeasonFactory, IMDBSeleniumScraper):
-    def __init__(self, imdb_show_id, season, season_qty=1, browser=None):
+    def __init__(self, imdb_show_id, season, season_qty=1, browser=None, has_trivia=True):
         SeasonFactory.__init__(self, imdb_show_id, season, season_qty=season_qty)
-        IMDBSeleniumScraper.__init__(self, browser=browser)
+        IMDBSeleniumScraper.__init__(self, browser=browser, will_get_trivia=has_trivia)
 
     def create(self):
         s = Season(self.season, self.show_id)
-        s.episodes = self.get_episode_data(self.show_id, self.season)
+        s.episodes = self.get_episode_data(self.show_id, self.season, browser=self.default_browser)
         return s
+
+
+class IMDBCompactSeasonFactory(SeasonFactory, IMDBSeleniumScraper):
+    def __init__(self, imdb_show_id, season, season_qty=1, browser=None):
+        SeasonFactory.__init__(self, imdb_show_id, season, season_qty=season_qty)
+        IMDBSeleniumScraper.__init__(self, browser=browser, will_get_trivia=False)
+
+    def create(self):
+        s = Season(self.season, self.show_id)
+        s.serialize_ep_ids_only = True
+        s.episodes = self.get_episode_data(self.show_id, self.season, browser=self.default_browser)
+        return s
+
+
+# class IMDBEpisodeFactory(Episode, IMDBSeleniumScraper):
+#     def __init__(self, imdb_show_id, season, season_qty=1, browser=None, has_trivia=True):
+#         SeasonFactory.__init__(self, imdb_show_id, season, season_qty=season_qty)
+#         IMDBSeleniumScraper.__init__(self, browser=browser, will_get_trivia=has_trivia)
+#
+#     def create(self):
+#         s = Season(self.season, self.show_id)
+#         s.episodes = self.get_episode_data(self.show_id, self.season, browser=self.default_browser)
+#         return s
 

@@ -25,3 +25,16 @@ def show():
     print([i for i in request.args.keys()])
     show_data = imdb.OMDBAPIShowFactory(request.args['title'], **opt_args).create()
     return jsonify(show_data.serialize())
+
+
+@APP.route('/episode')
+def episode():
+    opt_args = {}
+    ep_id = request.args('ep_id', None)
+
+    if ep_id:
+        show_data = imdb.OMDBAPIShowFactory(request.args['title'], has_trivia=False, **opt_args).create()
+        return jsonify(show_data.serialize())
+    else:
+        pass
+        # return 404

@@ -1,7 +1,9 @@
+const DEFAULT_SEASON_VAL = "1"
+
 class EpisodeComponent extends React.Component {
     render() {
-        return <div><h3> { this.props.episode['title'] }</h3>
-            <ul>
+        return <div><h3 id={this.props.episode['show_id']}> {this.props.episode['title'] }</h3>
+            <ul class='trivia_list'>
                 { this.props.episode['trivia'].map( function(t) { return <li>{ t['fact'] }</li> } ) }
             </ul>
             </div>
@@ -16,11 +18,12 @@ class SeasonComponent extends React.Component {
                 </div>
     }
 }
+
 var TVTriviaSearch = React.createClass({
   getInitialState: function(){
     return {
     titleInput: '',
-    seasonInput: '',
+    seasonInput: DEFAULT_SEASON_VAL,
     showData: ''};
   },
   handleSubmit: function(event){
@@ -76,7 +79,7 @@ var TVTriviaSearch = React.createClass({
                         </div>
                         <div className="form_input">
                             <label for='season'>Season: </label><br/>
-                            <input idName="season" className="small_input" type="text" label="Season" placeholder="1" value={this.state.seasonInput} onChange={this.handleSeasonChange}/>
+                            <input idName="season" className="small_input" type="text" label="Season" placeholder={DEFAULT_SEASON_VAL} value={this.state.seasonInput} onChange={this.handleSeasonChange}/>
                         </div>
                         <div className="form_input">
                             <div className="status"></div>

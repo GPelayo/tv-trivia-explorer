@@ -44,6 +44,11 @@ class Season:
             }
         }
 
+    @property
+    def episode_ids(self):
+        print([e.imdb_id for e in self.episodes])
+        return [e.imdb_id for e in self.episodes]
+
 
 class Episode:
     title = None
@@ -51,13 +56,13 @@ class Episode:
     ep_num = None
     link = None
     trivia = None
-    imdb_id = None
+    show_id = None
 
-    def __init__(self, title, season, link):
+    def __init__(self, ep_id, title, season):
         self.title = title
         self.season = season
-        self.link = link
         self.trivia = []
+        self.show_id = ep_id
 
     def __str__(self):
         return self.link
@@ -69,7 +74,7 @@ class Episode:
                         'season': self.season,
                         'ep_num': self.ep_num,
                         'link': self.link,
-                        'imdb_id': self.imdb_id,
+                        'show_id': self.show_id,
                         'trivia': [t.serialize() for t in self.trivia]
                     }
                 }

@@ -16,7 +16,7 @@ def get_show_by_id(title_query, year=''):
     imdb_id = omdb_json.get('imdbID')
     title = omdb_json.get('Title')
     s = Show(imdb_id, title)
-    s.season_qty = omdb_json.get('totalSeasons')
+    s.season_qty = int(omdb_json.get('totalSeasons'))
     y = omdb_json.get('Year', None)
 
     if y:
