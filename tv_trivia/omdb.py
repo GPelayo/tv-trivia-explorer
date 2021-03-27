@@ -1,8 +1,8 @@
 import json
 from urllib import request, parse
 import codecs
-from tv_trivia import settings
-from tv_trivia.models import Show
+import settings
+from models import Show
 
 
 def get_show_by_id(title_query, year=''):

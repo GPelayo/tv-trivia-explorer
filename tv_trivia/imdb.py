@@ -6,8 +6,6 @@ import omdb
 import settings
 
 MAX_SEASONS = 100
-
-
 TRIVIA_SUFFIX = "trivia"
 
 
@@ -45,18 +43,12 @@ class IMDBSeleniumScraper:
     def get_episode_data(self, show_id, season, browser=None):
         # print("Getting {} data".format(show_id))
         episode_list = []
-<<<<<<< Updated upstream
-        print('^^', 'http://www.imdb.com/title/{}/episodes?season={}'.format(show_id, season))
-        browser.get('http://www.imdb.com/title/{}/episodes?season={}'.format(show_id, season))
-        trivia_browser = self.driver_type()
-=======
         # print("Getting Ep Data", browser)
         ep_link = 'http://www.imdb.com/title/{}/episodes?season={}'.format(show_id, season)
         # print(ep_link)
         browser.get(ep_link)
         if self.will_get_trivia:
             trivia_browser = self.driver_type()
->>>>>>> Stashed changes
         for e in browser.find_elements_by_xpath("//div[contains(@class, 'list_item')]"
                                                 "/div[@class='info']"):
             link_element = e.find_element_by_xpath("strong/a")
@@ -134,13 +126,8 @@ class EpisodeFactory(TVFactory):
 
 
 class OMDBAPIShowFactory(ShowFactory, IMDBSeleniumScraper):
-<<<<<<< Updated upstream
-    def __init__(self, title=None, imdb_show_id=None, year=None, season_start=None, season_end=None, browser=None):
-        print(season_end)
-=======
     def __init__(self, title=None, imdb_show_id=None, year=None, season_start=None, season_end=None, browser=None,
                  has_trivia=True):
->>>>>>> Stashed changes
         ShowFactory.__init__(self, title=title, show_id=imdb_show_id, season_start=season_start, season_end=season_end,
                              year=year)
         IMDBSeleniumScraper.__init__(self, browser=browser, will_get_trivia=has_trivia)
@@ -149,11 +136,6 @@ class OMDBAPIShowFactory(ShowFactory, IMDBSeleniumScraper):
         sh = omdb.get_show_by_id(self.title, year=self.year)
         season_min = self.season_start or 1
         season_max = self.season_end or sh.season_qty
-<<<<<<< Updated upstream
-        print(season_max, season_min, self.season_end)
-        sh.seasons = [IMDBSeasonFactory(imdb_show_id=sh.imdb_id, season=i, browser=self.default_browser).create()
-                      for i in range(int(season_min), int(season_max)+1)]
-=======
         print(self.season_end, season_max)
         try:
             sh.seasons = [IMDBCompactSeasonFactory(imdb_show_id=sh.imdb_id, season=i, browser=self.default_browser).create()
@@ -166,7 +148,6 @@ class OMDBAPIShowFactory(ShowFactory, IMDBSeleniumScraper):
                 pass
             else:
                 print("No need safely close browser. Browser already closed.")
->>>>>>> Stashed changes
         return sh
 
 
@@ -202,4 +183,3 @@ class IMDBCompactSeasonFactory(SeasonFactory, IMDBSeleniumScraper):
 #         s = Season(self.season, self.show_id)
 #         s.episodes = self.get_episode_data(self.show_id, self.season, browser=self.default_browser)
 #         return s
-

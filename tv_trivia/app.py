@@ -7,7 +7,6 @@ APP = Flask(__name__)
 DEFAULT_SEASON = 1
 
 
-@APP.route('/')
 def search_page():
     return render_template('trivia.html')
 
