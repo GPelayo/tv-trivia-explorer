@@ -1,0 +1,15 @@
+---
+application:
+  name: "tv-trivia-pit"
+  project: "superhero-trivia-api"
+  organization: "QoveryCommunity"
+databases:
+- type: "POSTGRESQL"
+  name: "tv-trivia"
+  version: "11"
+routers:
+- name: "main-tv-trivia-pit"
+  routes:
+  - application_name: "tv-trivia-pit"
+    paths:
+    - "/*"
