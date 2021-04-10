@@ -1,15 +1,14 @@
 ---
 application:
-  name: "tv-trivia-pit"
-  project: "superhero-trivia-api"
+  name: "binge-companion-api"
+  project: "superhero-binge-companion-api"
   organization: "QoveryCommunity"
 databases:
 - type: "POSTGRESQL"
-  name: "tv-trivia"
-  version: "11"
+  name: "superhero-binge-companion"
 routers:
-- name: "main-tv-trivia-pit"
+- name: "main-binge-companion-api"
   routes:
-  - application_name: "tv-trivia-pit"
+  - application_name: "binge-companion-api"
     paths:
     - "/*"
