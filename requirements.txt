@@ -11,7 +11,7 @@ configparser==3.5.0
 decorator==4.0.10
 entrypoints==0.2.2
 enum34==1.1.6
-Flask==0.12.2
+Flask==1.0
 ipython-genutils==0.1.0
 itsdangerous==0.24
 jedi==0.10.2
