@@ -15,7 +15,7 @@ Flask==0.12.2
 ipython-genutils==0.1.0
 itsdangerous==0.24
 jedi==0.10.2
-Jinja2==2.8
+Jinja2==2.11.3
 jsonschema==2.5.1
 jupyter-core==4.2.0
 macholib==1.5.1
