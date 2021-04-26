@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from rest_framework import viewsets
 from superhero.models import Series, Episode, Trivia
 from superhero.serializers import SeriesSerializer, EpisodeSerializer, TriviaSerializer
