@@ -8,12 +8,18 @@ class Series(models.Model):
     season_count = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1)])
     thumbnail_url = models.URLField()
 
+    def __str__(self):
+        return f'{self.name}'
+
 
 class Episode(models.Model):
     episode_id = models.TextField(primary_key=True)
     name = models.TextField()
     season = models.TextField()
     series = models.ForeignKey(Series, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.series} S{int(self.season):02}EX - {self.name}'
 
 
 class Trivia(models.Model):
@@ -22,6 +28,9 @@ class Trivia(models.Model):
     score_denominator = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1)])
     text = models.TextField()
     episode = models.ForeignKey(Episode, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'[{self.episode}] {self.text}'
 
 
 class TriviaTag(models.Model):
