@@ -27,7 +27,8 @@ class Trivia(models.Model):
     score = models.PositiveIntegerField()
     score_denominator = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1)])
     text = models.TextField()
-    episode = models.ForeignKey(Episode, on_delete=models.CASCADE)
+    series = models.ForeignKey(Series, on_delete=models.CASCADE)
+    episode = models.ForeignKey(Episode, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         return f'[{self.episode}] {self.text}'
