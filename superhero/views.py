@@ -1,6 +1,10 @@
+
+from django.http import JsonResponse
 from rest_framework import viewsets
+
 from superhero.models import Series, Episode, Trivia
 from superhero.serializers import SeriesSerializer, EpisodeSerializer, TriviaSerializer
+from binge_companion.settings import VERSION
 
 
 class SeriesViewSet(viewsets.ModelViewSet):
@@ -16,3 +20,7 @@ class EpisodeViewSet(viewsets.ModelViewSet):
 class TriviaViewSet(viewsets.ModelViewSet):
     queryset = Trivia.objects.all()
     serializer_class = TriviaSerializer
+
+
+def version(request):
+    return JsonResponse({'version': VERSION})

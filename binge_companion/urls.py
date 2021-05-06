@@ -26,6 +26,7 @@ router.register(r'trivia', views.TriviaViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('version', views.version),
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
     path('api-token-auth/', auth_views.obtain_auth_token, name='api-tokn-auth'),

@@ -35,6 +35,7 @@ DEBUG = os.environ.get('IS_DEBUG', 'false').lower() == 'true'
 
 ALLOWED_HOSTS = ['*']
 
+VERSION = '20210506'
 
 # Application definition
 
