@@ -43,8 +43,8 @@ class SeriesApiTestCase(APITestCase):
         self.token = auth_token_request.json()['token']
         self.client.credentials(HTTP_AUTHORIZATION=f'token {self.token}')
 
-    def test_create_series_normal(self):
-        with open(os.path.join(LOCAL_TEST_JSON_DIRECTORY, 'series-normal.json'), 'r') as test_file:
+    def test_createseries_normal(self):
+        with open(os.path.join(LOCAL_TEST_JSON_DIRECTORY, 'createtest-normal-series.json'), 'r') as test_file:
             test_json = json.load(test_file)
             response = self.client.post(reverse('series-list'), data=test_json, format='json', follow=True)
             self.assertEqual(response.status_code, 201, response.data)
