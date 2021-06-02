@@ -47,9 +47,10 @@ class SeriesSerializer(serializers.HyperlinkedModelSerializer):
         series_trivia_data = validated_data.pop('trivia_set')
         series = Series.objects.create(**validated_data)
         episode_trivia_ids = set()
-        self.create_linked_episode_data(episode_data, series, episode_trivia_ids=episode_trivia_ids)
+        for episode in episode_data:
+            self.create_linked_episode_data(episode, series, episode_trivia_ids=episode_trivia_ids)
         for trivia_json in series_trivia_data:
-            if trivia_json['trivia_id'] in episode_trivia_ids:
+            if trivia_json['trivia_id'] not in episode_trivia_ids:
                 Trivia.objects.create(series=series, **trivia_json)
         return series
 
