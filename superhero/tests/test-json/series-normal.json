@@ -1,0 +1,80 @@
+{
+  "series_id": "1110",
+  "name": "Man staring at wall.",
+  "season_count": 2,
+  "trivia_set": [
+    {
+      "trivia_id": "acab",
+      "score": 10,
+      "score_denominator": 10,
+      "text": "Original concept was 'Man watching paint dry'"
+    },
+    {
+      "trivia_id": "1232",
+      "score": 7,
+      "score_denominator": 10,
+      "text": "Season 2 casted a moth. But was cut due to budget reasons."
+    }
+  ],
+  "episode_set": [
+    {
+      "episode_id": "1.1",
+      "name": "Pilot",
+      "season": 1,
+      "trivia_set": [
+        {
+          "trivia_id": "3",
+          "score": 1,
+          "score_denominator": 121,
+          "text": "Walls suck."
+        },
+        {
+          "trivia_id": "5",
+          "score": 80,
+          "score_denominator": 121,
+          "text": "Took 5 hours to remove graffiti for filming."
+        }
+      ]
+    },
+    {
+      "episode_id": "1.2",
+      "name": "Shed Wall",
+      "season": 1,
+      "trivia_set": [
+        {
+          "trivia_id": "32",
+          "score": 5,
+          "score_denominator": 521,
+          "text": "Walls still suck."
+        },
+        {
+          "trivia_id": "15",
+          "score": 89,
+          "score_denominator": 151,
+          "text": "Had to cancel rest of the season due to budget restraints."
+        },
+        {
+          "trivia_id": "89",
+          "score": 80,
+          "score_denominator": 121,
+          "text": "Actor playing 'Man' was request double on his contract. Was planned to be re-casted before the season was canceled."
+        }
+      ]
+    },
+    {
+      "episode_id": "2.1",
+      "name": "Pilot",
+      "season": 2,
+      "trivia_set": [
+        {
+          "trivia_id": "1232",
+          "score": 7,
+          "score_denominator": 10,
+          "text": "Season 2 casted a moth. But was cut due to budget reasons."
+        }
+      ]
+    }
+  ]
+}
+
+
