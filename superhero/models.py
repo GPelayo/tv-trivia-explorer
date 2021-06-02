@@ -6,7 +6,7 @@ class Series(models.Model):
     series_id = models.TextField(primary_key=True)
     name = models.TextField()
     season_count = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1)])
-    thumbnail_url = models.URLField()
+    thumbnail_url = models.URLField(null=True)
 
     def __str__(self):
         return f'{self.name}'
