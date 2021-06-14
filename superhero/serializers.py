@@ -1,7 +1,11 @@
+import logging
+
 from superhero.models import Trivia, Episode, Series
 from rest_framework import serializers
 
 from superhero import helpers
+
+log = logging.getLogger('django')
 
 
 class TriviaSerializer(serializers.HyperlinkedModelSerializer):
@@ -26,8 +30,10 @@ class EpisodeSerializer(serializers.HyperlinkedModelSerializer):
     def create(self, validated_data):
         trivia_data = validated_data.pop('trivia_set')
         episode = Episode.objects.create(**validated_data)
+        log.info(f'Created Episode: {episode}')
         for trivia_json in trivia_data:
-            Trivia.objects.create(episode=episode, **trivia_json)
+            new_trivia = Trivia.objects.create(episode=episode, **trivia_json)
+            log.info(f'Created Trivia: {new_trivia}')
         return episode
 
 
@@ -46,20 +52,24 @@ class SeriesSerializer(serializers.HyperlinkedModelSerializer):
         episode_data = validated_data.pop('episode_set')
         series_trivia_data = validated_data.pop('trivia_set')
         series = Series.objects.create(**validated_data)
+        log.info(f'Created Series: {series}')
         episode_trivia_ids = set()
         for episode in episode_data:
             self.create_linked_episode_data(episode, series, episode_trivia_ids=episode_trivia_ids)
         for trivia_json in series_trivia_data:
             if trivia_json['trivia_id'] not in episode_trivia_ids:
-                Trivia.objects.create(series=series, **trivia_json)
+                new_trivia = Trivia.objects.create(series=series, **trivia_json)
+                log.info(f'Created Trivia: {new_trivia}')
         return series
 
     @staticmethod
     def create_linked_episode_data(episode_data, series_instance, episode_trivia_ids):
         trivia_data = episode_data.pop('trivia_set')
         episode = Episode.objects.create(series=series_instance, **episode_data)
+        log.info(f'Created Episode: {episode}')
         for trivia_json in trivia_data:
-            Trivia.objects.create(series=series_instance, episode=episode, **trivia_json)
+            new_trivia = Trivia.objects.create(series=series_instance, episode=episode, **trivia_json)
+            log.info(f'Created Trivia: {new_trivia}')
             episode_trivia_ids.add(trivia_json['trivia_id'])
 
     @staticmethod
@@ -75,14 +85,17 @@ class SeriesSerializer(serializers.HyperlinkedModelSerializer):
         try:
             trv_instance = Trivia.objects.get(trivia_id=trivia_id)
         except Trivia.DoesNotExist:
-            Trivia.objects.create(series=series_instance, **kwargs, **trivia_json)
+            new_trivia = Trivia.objects.create(series=series_instance, **kwargs, **trivia_json)
+            log.info(f'Created Trivia: {new_trivia}')
         else:
             self.update_object(trv_instance, trivia_json, series=series_instance)
+            log.info(f'Updated Trivia: {trv_instance}')
 
     def update(self, instance, validated_data):
         episode_data = validated_data.pop('episode_set')
         series_trivia_data = validated_data.pop('trivia_set')
         self.update_object(instance, validated_data)
+        log.info(f'Updated Series: {instance}')
         episode_trivia_ids = set()
         for episode_json in episode_data:
             trivia_data = episode_json.pop('trivia_set')
@@ -92,6 +105,7 @@ class SeriesSerializer(serializers.HyperlinkedModelSerializer):
                 self.create_linked_episode_data(episode_json, instance, series_trivia_data)
             else:
                 self.update_object(ep_instance, episode_json, series=instance)
+                log.info(f'Updated Episode: {ep_instance}')
 
             for trivia_json in trivia_data:
                 self.update_trivia_object(instance, trivia_json['trivia_id'], trivia_json)
@@ -102,7 +116,8 @@ class SeriesSerializer(serializers.HyperlinkedModelSerializer):
                 try:
                     trv_instance = Trivia.objects.get(trivia_id=trivia_json['trivia_id'])
                 except Trivia.DoesNotExist:
-                    Trivia.objects.create(series=instance, episode=ep_instance, **trivia_json)
+                    new_trivia = Trivia.objects.create(series=instance, episode=ep_instance, **trivia_json)
+                    log.info(f'Created Trivia: {new_trivia}')
                 else:
                     self.update_object(trv_instance, trivia_json, series=instance)
 
