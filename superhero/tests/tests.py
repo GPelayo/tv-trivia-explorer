@@ -108,3 +108,11 @@ class SeriesApiTestCase(APITestCase):
             test_json = json.load(test_file)
             response = self.client.post(reverse('series-list'), data=test_json, format='json', follow=True)
             self.assertEqual(response.status_code, 201, response.data)
+
+    def test_editseries_edittedseries(self):
+        with open(os.path.join(LOCAL_TEST_JSON_DIRECTORY, 'edittest-editedseries-series.json'), 'r') as test_file:
+            test_json = json.load(test_file)
+            response = self.client.patch(reverse('series-detail', kwargs={'pk': 'BS'}), data=test_json, follow=True)
+            self.assertEqual(response.status_code, 200, response.data)
+            response = self.client.get(reverse('series-detail', kwargs={'pk': 'BS'}), follow=True)
+            self.assertValidResponseSeriesJson(test_json, response.json())
