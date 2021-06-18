@@ -1,0 +1,54 @@
+{
+  "series_id": "BS",
+  "name": "The Big Betrayal",
+  "season_count": 2,
+  "thumbnail_url": "http://127.0.0.1:8000",
+  "trivia_set": [
+    {
+      "trivia_id": "big-betrayal",
+      "score": 10,
+      "score_denominator": 10,
+      "text": "Big Setup is big."
+    },
+    {
+      "trivia_id": "big-money",
+      "score": 7,
+      "score_denominator": 10,
+      "text": "Bad guys get big money"
+    }
+  ],
+  "episode_set": [
+    {
+      "episode_id": "BB1.1",
+      "name": "Pilot",
+      "season": 1,
+      "trivia_set": [
+        {
+          "trivia_id": "IMAX",
+          "score": 1,
+          "score_denominator": 121,
+          "text": "First episode was filmed using IMAX cameras. Changes"
+        },
+        {
+          "trivia_id": "IRL-Big-Betrayal",
+          "score": 80,
+          "score_denominator": 121,
+          "text": "Series cancelled after executive producer ran off with the funding."
+        }
+      ]
+    },
+    {
+      "episode_id": "BB2.1",
+      "name": "Pilot 2",
+      "season": 2,
+      "trivia_set": [
+        {
+          "trivia_id": "Big-Reveal ",
+          "score": 80,
+          "score_denominator": 121,
+          "text": "Series planning to be revived."
+        }
+      ]
+    }
+  ]
+}

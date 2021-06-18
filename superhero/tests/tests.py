@@ -82,25 +82,26 @@ class SeriesApiTestCase(APITestCase):
                 assert False, f'No key {pk} in first list'
             self.assertDictEqual(o1, o2)
 
-    def assertValidResponseSeriesJson(self, response_series_json):
-        setup_series = copy.deepcopy(self.setup_series_json)
-        setup_episodes = setup_series.pop('episode_set')
+    def assertValidResponseSeriesJson(self, response_series_json, loaded_test_json):
+        setup_episodes = loaded_test_json.pop('episode_set')
         self.assertObjectList(setup_episodes, response_series_json.pop('episode_set'), 'episode_id')
-        setup_trivia = setup_series.pop('trivia_set') + [t for e in setup_episodes for t in e['trivia_set']]
+        setup_trivia = loaded_test_json.pop('trivia_set') + [t for e in setup_episodes for t in e['trivia_set']]
         self.assertObjectList(setup_trivia, response_series_json.pop('trivia_set'), 'trivia_id')
-        self.assertDictEqual(response_series_json, setup_series)
+        self.assertDictEqual(response_series_json, loaded_test_json)
 
     def test_getserieslist_normal(self):
         response = self.client.get(reverse('series-list'), follow=True)
         self.assertEqual(response.status_code, 200, response.data)
         test_json = response.json()
-        self.assertValidResponseSeriesJson(test_json[0])
+        setup_series = copy.deepcopy(self.setup_series_json)
+        self.assertValidResponseSeriesJson(test_json[0], setup_series)
 
     def test_getseriesdetail_normal(self):
         response = self.client.get(reverse('series-detail', kwargs={'pk': 'BS'}), follow=True)
         self.assertEqual(response.status_code, 200, response.data)
         test_series_json = response.json()
-        self.assertValidResponseSeriesJson(test_series_json)
+        setup_series = copy.deepcopy(self.setup_series_json)
+        self.assertValidResponseSeriesJson(test_series_json, setup_series)
 
     def test_createseries_normal(self):
         with open(os.path.join(LOCAL_TEST_JSON_DIRECTORY, 'createtest-normal-series.json'), 'r') as test_file:
