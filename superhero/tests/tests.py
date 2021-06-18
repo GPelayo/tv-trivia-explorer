@@ -103,6 +103,16 @@ class SeriesApiTestCase(APITestCase):
         setup_series = copy.deepcopy(self.setup_series_json)
         self.assertValidResponseSeriesJson(test_series_json, setup_series)
 
+    def test_deleteseries_nosetupseries(self):
+        with open(os.path.join(LOCAL_TEST_JSON_DIRECTORY, 'edittest-editedseries-series.json'), 'r') as test_file:
+            test_json = json.load(test_file)
+            response = self.client.delete(reverse('series-detail', kwargs={'pk': 'BS'}), data=test_json, follow=True)
+            self.assertEqual(response.status_code, 204, response.data)
+            response = self.client.get(reverse('series-list'), follow=True)
+            self.assertEqual(len(response.data), 0, response.data)
+            response = self.client.get(reverse('series-detail', kwargs={'pk': 'BS'}), follow=True)
+            self.assertEqual(response.status_code, 404, response.data)
+
     def test_createseries_normal(self):
         with open(os.path.join(LOCAL_TEST_JSON_DIRECTORY, 'createtest-normal-series.json'), 'r') as test_file:
             test_json = json.load(test_file)
