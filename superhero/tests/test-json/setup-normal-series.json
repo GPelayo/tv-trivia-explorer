@@ -2,7 +2,7 @@
   "series_id": "BS",
   "name": "The big setup",
   "season_count": 2,
-  "thumbnail_url": null,
+  "thumbnail_url": "http://127.0.0.1:8000",
   "trivia_set": [
     {
       "trivia_id": "big-betrayal",
