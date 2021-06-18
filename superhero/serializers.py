@@ -18,7 +18,7 @@ class TriviaSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class EpisodeSerializer(serializers.HyperlinkedModelSerializer):
-    trivia_set = TriviaSerializer(many=True)
+    trivia_set = TriviaSerializer(many=True, required=False)
 
     class Meta:
         model = Episode
@@ -39,7 +39,7 @@ class EpisodeSerializer(serializers.HyperlinkedModelSerializer):
 
 class SeriesSerializer(serializers.HyperlinkedModelSerializer):
     episode_set = EpisodeSerializer(many=True)
-    trivia_set = TriviaSerializer(many=True)
+    trivia_set = TriviaSerializer(many=True, required=False)
 
     class Meta:
         model = Series
@@ -64,7 +64,7 @@ class SeriesSerializer(serializers.HyperlinkedModelSerializer):
 
     @staticmethod
     def create_linked_episode_data(episode_data, series_instance, episode_trivia_ids):
-        trivia_data = episode_data.pop('trivia_set')
+        trivia_data = episode_data.pop('trivia_set')  if 'trivia_set' in episode_data else []
         episode = Episode.objects.create(series=series_instance, **episode_data)
         log.info(f'Created Episode: {episode}')
         for trivia_json in trivia_data:
@@ -92,13 +92,13 @@ class SeriesSerializer(serializers.HyperlinkedModelSerializer):
             log.info(f'Updated Trivia: {trv_instance}')
 
     def update(self, instance, validated_data):
-        episode_data = validated_data.pop('episode_set')
-        series_trivia_data = validated_data.pop('trivia_set')
+        episode_data = validated_data.pop('episode_set') if 'episode_set' in validated_data else []
+        series_trivia_data = validated_data.pop('trivia_set') if 'trivia_set' in validated_data else []
         self.update_object(instance, validated_data)
         log.info(f'Updated Series: {instance}')
         episode_trivia_ids = set()
         for episode_json in episode_data:
-            trivia_data = episode_json.pop('trivia_set')
+            trivia_data = episode_json.pop('trivia_set') if 'trivia_set' in validated_data else []
             try:
                 ep_instance = Episode.objects.get(episode_id=episode_json['episode_id'])
             except Episode.DoesNotExist:
