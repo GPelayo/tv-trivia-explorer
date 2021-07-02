@@ -125,4 +125,4 @@ class SeriesApiTestCase(APITestCase):
             response = self.client.patch(reverse('series-detail', kwargs={'pk': 'BS'}), data=test_json, follow=True)
             self.assertEqual(response.status_code, 200, response.data)
             response = self.client.get(reverse('series-detail', kwargs={'pk': 'BS'}), follow=True)
-            self.assertValidResponseSeriesJson(test_json, response.json())
+            self.assertValidResponseSeriesJson(response.json(), test_json)
