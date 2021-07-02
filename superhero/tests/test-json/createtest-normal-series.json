@@ -2,7 +2,7 @@
   "series_id": "1110",
   "name": "Man staring at wall.",
   "season_count": 2,
-  "trivia_set": [
+  "series_wide_trivia": [
     {
       "trivia_id": "acab",
       "score": 10,
@@ -16,12 +16,12 @@
       "text": "Season 2 casted a moth. But was cut due to budget reasons."
     }
   ],
-  "episode_set": [
+  "episodes": [
     {
       "episode_id": "1.1",
       "name": "Pilot",
       "season": 1,
-      "trivia_set": [
+      "trivia": [
         {
           "trivia_id": "3",
           "score": 1,
@@ -40,7 +40,7 @@
       "episode_id": "1.2",
       "name": "Shed Wall",
       "season": 1,
-      "trivia_set": [
+      "trivia": [
         {
           "trivia_id": "32",
           "score": 5,
@@ -65,7 +65,7 @@
       "episode_id": "2.1",
       "name": "Pilot",
       "season": 2,
-      "trivia_set": [
+      "trivia": [
         {
           "trivia_id": "1232",
           "score": 7,

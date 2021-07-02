@@ -46,13 +46,13 @@ class SeriesApiTestCase(APITestCase):
         with open(os.path.join(LOCAL_TEST_JSON_DIRECTORY, 'setup-normal-series.json')) as setup_file:
             cls.setup_series_json = json.load(setup_file)
             series_json = copy.deepcopy(cls.setup_series_json)
-            test_episode_json = series_json.pop('episode_set')
-            test_trivia_json = series_json.pop('trivia_set')
+            test_episode_json = series_json.pop('episodes')
+            test_trivia_json = series_json.pop('series_wide_trivia')
             test_series = Series.objects.create(**series_json)
             for t in test_trivia_json:
                 Trivia.objects.create(series=test_series, **t)
             for e in test_episode_json:
-                episode_trivia_json = e.pop('trivia_set')
+                episode_trivia_json = e.pop('trivia')
                 test_episode = Episode.objects.create(series=test_series, **e)
                 for t in episode_trivia_json:
                     Trivia.objects.create(series=test_series, episode=test_episode, **t)
@@ -66,6 +66,7 @@ class SeriesApiTestCase(APITestCase):
 
     def assertDictEqual(self, d1: Dict[Any, Any], d2: Dict[Any, Any],
                         msg: Any = ...) -> None:
+
         for k in set(list(d1.keys()) + list(d2.keys())):
             self.assertEqual(d1[k], d2[k], msg)
 
@@ -83,10 +84,11 @@ class SeriesApiTestCase(APITestCase):
             self.assertDictEqual(o1, o2)
 
     def assertValidResponseSeriesJson(self, response_series_json, loaded_test_json):
-        setup_episodes = loaded_test_json.pop('episode_set')
-        self.assertObjectList(setup_episodes, response_series_json.pop('episode_set'), 'episode_id')
-        setup_trivia = loaded_test_json.pop('trivia_set') + [t for e in setup_episodes for t in e['trivia_set']]
-        self.assertObjectList(setup_trivia, response_series_json.pop('trivia_set'), 'trivia_id')
+        setup_episodes = loaded_test_json.pop('episodes')
+        self.assertObjectList(setup_episodes, response_series_json.pop('episodes'), 'episode_id')
+        episode_trivia = [t for e in setup_episodes for t in e['trivia']]
+        setup_trivia = loaded_test_json.pop('series_wide_trivia', []) + episode_trivia
+        self.assertObjectList(setup_trivia, response_series_json.pop('trivia', []), 'trivia_id')
         self.assertDictEqual(response_series_json, loaded_test_json)
 
     def test_getserieslist_normal(self):
