@@ -1,5 +1,5 @@
 
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpRequest
 from rest_framework import viewsets
 
 from superhero.models import Series, Episode, Trivia
@@ -22,5 +22,5 @@ class TriviaViewSet(viewsets.ModelViewSet):
     serializer_class = TriviaSerializer
 
 
-def version(request):
+def version(request: HttpRequest) -> JsonResponse:
     return JsonResponse({'version': VERSION})

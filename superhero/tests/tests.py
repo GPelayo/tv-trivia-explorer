@@ -1,7 +1,7 @@
 import copy
 import json
 import os
-from typing import Dict, Any
+from typing import List, Dict, Any
 
 from django.urls import reverse
 from django.contrib.auth.models import User
@@ -70,7 +70,7 @@ class SeriesApiTestCase(APITestCase):
         for k in set(list(d1.keys()) + list(d2.keys())):
             self.assertEqual(d1[k], d2[k], msg)
 
-    def assertObjectList(self, l1, l2, primary_key_fieldname, msg=None):
+    def assertObjectList(self, l1: List[Any], l2: List[Any], primary_key_fieldname: str, msg: str = None):
         all_pks = set([l[primary_key_fieldname] for l in l1] + [l[primary_key_fieldname] for l in l2])
         for pk in all_pks:
             try:
@@ -83,7 +83,7 @@ class SeriesApiTestCase(APITestCase):
                 assert False, f'No key {pk} in first list'
             self.assertDictEqual(o1, o2)
 
-    def assertValidResponseSeriesJson(self, response_series_json, loaded_test_json):
+    def assertValidResponseSeriesJson(self, response_series_json: Dict[Any], loaded_test_json: Dict[Any]):
         setup_episodes = loaded_test_json.pop('episodes')
         self.assertObjectList(setup_episodes, response_series_json.pop('episodes'), 'episode_id')
         episode_trivia = [t for e in setup_episodes for t in e['trivia']]
