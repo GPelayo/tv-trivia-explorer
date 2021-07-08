@@ -64,7 +64,7 @@ class SeriesApiTestCase(APITestCase):
         self.token = auth_token_request.json()['token']
         self.client.credentials(HTTP_AUTHORIZATION=f'token {self.token}')
 
-    def assertDictEqual(self, d1: Dict[Any, Any], d2: Dict[Any, Any],
+    def assertDictEqual(self, d1: Dict[str, Any], d2: Dict[str, Any],
                         msg: Any = ...) -> None:
 
         for k in set(list(d1.keys()) + list(d2.keys())):
@@ -83,7 +83,7 @@ class SeriesApiTestCase(APITestCase):
                 assert False, f'No key {pk} in first list'
             self.assertDictEqual(o1, o2)
 
-    def assertValidResponseSeriesJson(self, response_series_json: Dict[Any], loaded_test_json: Dict[Any]):
+    def assertValidResponseSeriesJson(self, response_series_json: Dict[str, Any], loaded_test_json: Dict[str, Any]):
         setup_episodes = loaded_test_json.pop('episodes')
         self.assertObjectList(setup_episodes, response_series_json.pop('episodes'), 'episode_id')
         episode_trivia = [t for e in setup_episodes for t in e['trivia']]

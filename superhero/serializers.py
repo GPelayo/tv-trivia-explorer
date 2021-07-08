@@ -30,7 +30,7 @@ class EpisodeSerializer(serializers.HyperlinkedModelSerializer):
             'episode_id': {'validators': []}
         }
 
-    def create(self, validated_data: Dict[Any]) -> Episode:
+    def create(self, validated_data: Dict[str, Any]) -> Episode:
         trivia_data = validated_data.pop('trivia')
         episode = Episode.objects.create(**validated_data)
         log.info(f'Created Episode: {episode}')
@@ -51,7 +51,7 @@ class SeriesSerializer(serializers.HyperlinkedModelSerializer):
             'series_id': {'validators': []}
         }
 
-    def create(self, validated_data: Dict[Any]) -> Series:
+    def create(self, validated_data: Dict[str, Any]) -> Series:
         episode_data = validated_data.pop('episodes')
         series_trivia_data = validated_data.pop('series_wide_trivia')
         series = Series.objects.create(**validated_data)
@@ -66,7 +66,7 @@ class SeriesSerializer(serializers.HyperlinkedModelSerializer):
         return series
 
     @staticmethod
-    def create_linked_episode_data(episode_data: Dict[Any], series_instance: Series, episode_trivia_ids: List[str]):
+    def create_linked_episode_data(episode_data: Dict[str, Any], series_instance: Series, episode_trivia_ids: List[str]):
         trivia_data = episode_data.pop('trivia')  if 'trivia' in episode_data else []
         episode = Episode.objects.create(series=series_instance, **episode_data)
         log.info(f'Created Episode: {episode}')
@@ -76,7 +76,7 @@ class SeriesSerializer(serializers.HyperlinkedModelSerializer):
             episode_trivia_ids.add(trivia_json['trivia_id'])
 
     @staticmethod
-    def update_object(instance: Model, new_data: Dict[Any], **kwargs):
+    def update_object(instance: Model, new_data: Dict[str, Any], **kwargs):
         new_data = dict(new_data)
         new_data.update(kwargs)
         for field in instance._meta.fields:
@@ -84,7 +84,7 @@ class SeriesSerializer(serializers.HyperlinkedModelSerializer):
                 setattr(instance, field.name, new_data[field.name])
         instance.save()
 
-    def update_trivia_object(self, instance: Series, trivia_id: str, trivia_json: Dict[Any], **kwargs):
+    def update_trivia_object(self, instance: Series, trivia_id: str, trivia_json: Dict[str, Any], **kwargs):
         try:
             trv_instance = Trivia.objects.get(trivia_id=trivia_id)
         except Trivia.DoesNotExist:
@@ -94,7 +94,7 @@ class SeriesSerializer(serializers.HyperlinkedModelSerializer):
             self.update_object(trv_instance, trivia_json, series=instance)
             log.info(f'Updated Trivia: {trv_instance}')
 
-    def update(self, instance: Series, validated_data: Dict[Any]) -> Series:
+    def update(self, instance: Series, validated_data: Dict[str, Any]) -> Series:
         episode_data = validated_data.pop('episodes') if 'episodes' in validated_data else []
         series_trivia_data = validated_data.pop('trivia') if 'trivia' in validated_data else []
         self.update_object(instance, validated_data)
